@@ -1,7 +1,10 @@
 const { JSDOM } = require('jsdom')
 const express = require('express')
+const serverless = require('serverless-http')
 const axios = require('axios')
 const app = express()
+
+const router = express.Router()
 
 const parseScorecard = contentDom => {
   const pars = Array.from(contentDom.window.document.querySelectorAll('.sgf-git-templates-scorecard-tee-row-par td'))
@@ -30,9 +33,10 @@ const parseSlope = contentDom => {
     }, [])
 }
 
-app.use(express.static(__dirname + './../../'));
+app.use(express.static(__dirname + './../../'))
+app.use(router)
 
-app.get('/api/club/:id', async function (req, res) {
+router.get('/api/club/:id', async function (req, res) {
   const club = req.params.id
   try {
     const courses = await axios.get('https://gitwidgets.golf.se/scorecard/courses', {
@@ -47,7 +51,7 @@ app.get('/api/club/:id', async function (req, res) {
   }
 })
 
-app.get('/api/slope', async function (req, res) {
+router.get('/api/slope', async function (req, res) {
 
   const clubId = req.query.club
   const courseId = req.query.course
@@ -73,7 +77,7 @@ app.get('/api/slope', async function (req, res) {
 
 })
 
-app.get('/api/scorecard', async function (req, res) {
+router.get('/api/scorecard', async function (req, res) {
 
   const clubId = req.query.club
   const courseId = req.query.course
@@ -99,4 +103,7 @@ app.get('/api/scorecard', async function (req, res) {
 
 })
 
-app.listen(3000)
+app.use('/.netlify/functions/server', router)
+
+module.exports = app
+module.exports.handler = serverless(app)
