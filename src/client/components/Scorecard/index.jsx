@@ -9,12 +9,6 @@ import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  table: {
-
-  },
-  cell: {
-    fontSize: '1rem',
-  },
   bold: {
     fontWeight: 'bold'
   }
@@ -37,7 +31,7 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
   const classes = useStyles()
 
   return <Box style={{ padding: '1rem' }} boxShadow={2}>
-    <Table className={classes.table}>
+    <Table padding="checkbox" className={classes.table} size="small">
       <TableHead>
         <TableRow>
           <TableCell>Hole</TableCell>
