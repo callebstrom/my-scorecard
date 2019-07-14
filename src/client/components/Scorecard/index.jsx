@@ -59,7 +59,10 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
                 required
                 onChange={({ target: { value: strokes } }) => setStrokes(entry.hole, strokes)}
                 inputProps={{
-                  min: 1
+                  min: 1,
+                  style: {
+                    textAlign: 'center'
+                  }
                 }}
                 type="number"
                 InputLabelProps={{
