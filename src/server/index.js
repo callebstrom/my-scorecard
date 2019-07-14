@@ -104,6 +104,6 @@ router.get('/api/scorecard', async function (req, res) {
 
 app.use('/', router)
 
-const port = port = process.env.PORT || 3000
+const port = process.env.PORT || 3000
 
 app.listen(port, () => console.log(`App listening on port ${port}!`))
