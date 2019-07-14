@@ -7,8 +7,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
+import { TableFooter } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+  cell: {
+    textAlign: 'center'
+  },
   bold: {
     fontWeight: 'bold'
   }
@@ -30,15 +34,24 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
 
   const classes = useStyles()
 
+  const strokesTotal = scorecard && scorecard.reduce((prev, entry) => {
+    return entry.strokes ? prev + parseInt(entry.strokes) : prev
+  }, 0)
+
+  const scoreTotal = scorecard && scorecard.reduce((prev, entry) => {
+    const score = Number(calculateScore(entry.par, entry.index, entry.strokes, slope))
+    return prev + (Number.isNaN(score) ? 0 : score)
+  }, 0)
+
   return <Box style={{ padding: '1rem' }} boxShadow={2}>
     <Table padding="checkbox" className={classes.table} size="small">
       <TableHead>
         <TableRow>
-          <TableCell>Hole</TableCell>
-          <TableCell>Index</TableCell>
-          <TableCell>Par</TableCell>
-          <TableCell>Strokes</TableCell>
-          <TableCell>Points</TableCell>
+          <TableCell className={classes.cell}>Hole</TableCell>
+          <TableCell className={classes.cell}>Index</TableCell>
+          <TableCell className={classes.cell}>Par</TableCell>
+          <TableCell className={classes.cell}>Strokes</TableCell>
+          <TableCell className={classes.cell}>Points</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -77,6 +90,51 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
           </TableRow>
         ))}
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell className={classes.cell} style={{ fontWeight: 'bold', color: 'black' }}>Total</TableCell>
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell>
+            <TextField
+              className={classes.cell}
+              fullWidth
+              value={strokesTotal}
+              inputProps={{
+                min: 1,
+                style: {
+                  textAlign: 'center'
+                }
+              }}
+              readOnly
+              variant="filled"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+            />
+          </TableCell>
+          <TableCell>
+            <TextField
+              className={classes.cell}
+              fullWidth
+              value={scoreTotal}
+              inputProps={{
+                min: 1,
+                style: {
+                  textAlign: 'center'
+                }
+              }}
+              readOnly
+              variant="filled"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              margin="normal"
+            />
+          </TableCell>
+        </TableRow>
+      </TableFooter>
     </Table>
   </Box>
 }
