@@ -1,6 +1,5 @@
 const { JSDOM } = require('jsdom')
 const express = require('express')
-const serverless = require('serverless-http')
 const axios = require('axios')
 const app = express()
 
@@ -103,7 +102,6 @@ router.get('/api/scorecard', async function (req, res) {
 
 })
 
-app.use('/.netlify/functions/server', router)
+app.use('/', router)
 
-module.exports = app
-module.exports.handler = serverless(app)
+app.listen(3000, () => console.log('Local app listening on port 3000!'))
