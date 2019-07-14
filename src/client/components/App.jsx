@@ -26,8 +26,8 @@ const theme = createMuiTheme({
 
 const scorecardFormStyle = {
   paddingTop: '5rem',
-  paddingLeft: '10vw',
-  paddingRight: '10vw',
+  paddingLeft: '5vw',
+  paddingRight: '5vw',
   maxWidth: '600px',
   margin: '0 auto'
 }
