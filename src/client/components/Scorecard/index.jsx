@@ -26,7 +26,7 @@ const calculateExtraStrokesForHole = (index, slope = 0, numberOfHoles = 18) => {
 }
 
 const calculateScore = (par, extraStrokesForHole, strokes) => {
-  if (!strokes || strokes < 0 || strokes === '0') return '-'
+  if (!strokes || strokes < 0 || strokes === '0' || !extraStrokesForHole) return '-'
 
   const score = 2 + (Number(par) + extraStrokesForHole - strokes)
 
@@ -70,7 +70,7 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
             <TableCell className={classes.cell}>{entry.par}</TableCell>
             <TableCell>
               <div style={{ position: 'relative' }}>
-                <span style={{ position: 'absolute', top: '0.5rem', fontSize: '0.75rem' }}>{calculateExtraStrokesForHole(entry.index, slope)}</span>
+                <span style={{ position: 'absolute', top: '0.5rem', fontSize: '0.75rem' }}>{calculateExtraStrokesForHole(entry.index, slope) || 0}</span>
               </div>
               <TextField
                 className={classes.cell}
