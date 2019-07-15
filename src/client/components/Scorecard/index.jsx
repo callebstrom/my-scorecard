@@ -18,14 +18,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const calculateScore = (par, index, strokes, slope = 0, numberOfHoles = 18) => {
+const calculateExtraStrokesForHole = (index, slope = 0, numberOfHoles = 18) => {
   const extraStrokeBaseline = Math.floor(slope / numberOfHoles)
   const numberOfHoleWithExtraStrokes = slope % numberOfHoles
   const isHoleEligableForExtraStrokesInAdditionToBaseline = numberOfHoleWithExtraStrokes >= index
-  const extraStrokesForHole = isHoleEligableForExtraStrokesInAdditionToBaseline ? extraStrokeBaseline + 1 : extraStrokeBaseline
-  const score = 2 + (Number(par) + extraStrokesForHole - strokes)
+  return isHoleEligableForExtraStrokesInAdditionToBaseline ? extraStrokeBaseline + 1 : extraStrokeBaseline
+}
 
-  if (Number.isNaN(score)) return '-'
+const calculateScore = (par, extraStrokesForHole, strokes) => {
+  if (!strokes || strokes < 0 || strokes === '0') return '-'
+
+  const score = 2 + (Number(par) + extraStrokesForHole - strokes)
 
   return score <= 0 ? '0' : `${score}`
 }
@@ -39,7 +42,8 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
   }, 0)
 
   const scoreTotal = scorecard && scorecard.reduce((prev, entry) => {
-    const score = Number(calculateScore(entry.par, entry.index, entry.strokes, slope))
+    const extraStrokesForHole = calculateExtraStrokesForHole(entry.index, slope)
+    const score = Number(calculateScore(entry.par, extraStrokesForHole, entry.strokes))
     return prev + (Number.isNaN(score) ? 0 : score)
   }, 0)
 
@@ -65,6 +69,9 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
             </TableCell>
             <TableCell className={classes.cell}>{entry.par}</TableCell>
             <TableCell>
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', top: '0.5rem', fontSize: '0.75rem' }}>{calculateExtraStrokesForHole(entry.index, slope)}</span>
+              </div>
               <TextField
                 className={classes.cell}
                 fullWidth
@@ -85,7 +92,11 @@ const Scorecard = ({ scorecard, setStrokes, slope }) => {
               />
             </TableCell>
             <TableCell className={[classes.cell, classes.bold]}>
-              {calculateScore(entry.par, entry.index, entry.strokes, slope)}
+              {calculateScore(
+                entry.par,
+                calculateExtraStrokesForHole(entry.index, slope),
+                entry.strokes
+              )}
             </TableCell>
           </TableRow>
         ))}
