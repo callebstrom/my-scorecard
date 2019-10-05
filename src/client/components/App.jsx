@@ -24,33 +24,64 @@ const theme = createMuiTheme({
   },
 });
 
-const scorecardFormStyle = {
-  paddingTop: '5rem',
-  paddingLeft: '5vw',
-  paddingRight: '5vw',
-  maxWidth: '600px',
-  margin: '0 auto'
+const styles = {
+  pictureStyle: {
+    position: 'absolute',
+    height: '100%'
+  },
+  imgStyle: {
+    width: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center center',
+    height: '100%'
+  },
+  headerStyle: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '20rem',
+    width: '100%'
+  },
+  scorecardFormStyle: {
+    paddingTop: '5rem',
+    paddingLeft: '5vw',
+    paddingRight: '5vw',
+    maxWidth: '600px',
+    margin: '0 auto'
+  },
+  h1Style: {
+    fontFamily: 'Roboto Condensed',
+    color: '#486f45',
+    zIndex: 1
+  },
+  teeStyle: {
+    marginTop: '0.5rem',
+    maxWidth: '5rem'
+  },
+  genderStyle: {
+    marginTop: '0.5rem'
+  },
+  slopeStyle: {
+    marginBottom: '1rem'
+  }
 }
 
-const headerStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundImage: 'url("https://i.pinimg.com/originals/9d/b3/38/9db338e15c4971c61b6c48e0de8ab3ee.jpg")',
-  backgroundPosition: 'top',
-  height: '20rem'
-}
-
-const h1Style = {
-  fontFamily: 'Roboto Condensed',
-  color: 'white',
-}
-
-const Header = () => <header style={headerStyle}>
-  <h1 style={h1Style}>My Scorecard</h1>
+const Header = () => <header style={styles.headerStyle}>
+  <picture style={styles.pictureStyle}>
+    <source
+      sizes="100vw"
+      type="image/jpeg"
+      srcSet="https://images.pexels.com/photos/912444/pexels-photo-912444.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=480 480w,
+              https://images.pexels.com/photos/912444/pexels-photo-912444.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=960 960w,
+              https://images.pexels.com/photos/912444/pexels-photo-912444.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=1440 1440w,
+              https://images.pexels.com/photos/912444/pexels-photo-912444.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=1920 1920w" />
+    <img style={styles.imgStyle} src="https://images.pexels.com/photos/912444/pexels-photo-912444.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=480" alt="golf-course" />
+  </picture>
+  <h1 style={styles.h1Style}>My Scorecard</h1>
 </header>
 
-const renderTees = (slope, tee, setTee) => <div style={{ marginTop: '0.5rem', maxWidth: '5rem' }} className="tees">
+const renderTees = (slope, tee, setTee) => <div style={styles.teeStyle} className="tees">
   <FormLabel component="legend">Tee *</FormLabel>
   <RadioGroup label="HCP" onChange={({ target: { value: tee } }) => setTee(tee)} name="tee" value={tee}>
     {slope.map(({ tee }) => <>
@@ -64,7 +95,7 @@ const renderTees = (slope, tee, setTee) => <div style={{ marginTop: '0.5rem', ma
   </RadioGroup>
 </div>
 
-const renderGender = (gender, setGender) => <RadioGroup style={{ marginTop: '0.5rem' }} label="HCP" onChange={({ target: { value: gender } }) => setGender(gender)} name="tee" value={gender}>
+const renderGender = (gender, setGender) => <RadioGroup style={styles.genderStyle} label="HCP" onChange={({ target: { value: gender } }) => setGender(gender)} name="tee" value={gender}>
   <FormLabel component="legend">Gender *</FormLabel>
   <FormControlLabel value="man" control={<Radio />} label="Man" />
   <FormControlLabel value="women" control={<Radio />} label="Women" />
@@ -101,7 +132,7 @@ const App = () => {
   return <div id="app">
     <ThemeProvider theme={theme}>
       <Header />
-      <div id="scorecard-form" style={scorecardFormStyle}>
+      <div id="scorecard-form" style={styles.scorecardFormStyle}>
         <CourseSelector
           club={club}
           setClub={setClub}
@@ -140,7 +171,7 @@ const App = () => {
         />
         {renderTees(slope, tee, setTee)}
         {renderGender(gender, setGender)}
-        <div style={{ marginBottom: '1rem' }}>
+        <div style={styles.slopeStyle}>
           <TextField
             fullWidth
             variant="outlined"
